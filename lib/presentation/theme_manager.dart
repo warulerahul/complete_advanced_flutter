@@ -31,6 +31,7 @@ ThemeData getApplicationThemeDate(){
           titleTextStyle: getRegularStyle(
               color: ColorManager.white, fontSize: FontSize.s16)),
     // Button theme
+
       buttonTheme: ButtonThemeData(
           shape: StadiumBorder(),
           disabledColor: ColorManager.grey1,
