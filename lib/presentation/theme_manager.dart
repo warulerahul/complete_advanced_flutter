@@ -31,7 +31,6 @@ ThemeData getApplicationThemeDate(){
           titleTextStyle: getRegularStyle(
               color: ColorManager.white, fontSize: FontSize.s16)),
     // Button theme
-
       buttonTheme: ButtonThemeData(
           shape: StadiumBorder(),
           disabledColor: ColorManager.grey1,
@@ -47,6 +46,11 @@ ThemeData getApplicationThemeDate(){
           borderRadius: BorderRadius.circular(AppSize.s12)))),
 
     // Text theme
+      textTheme: TextTheme(
+          headline1: getSemiBoldStyle(color: ColorManager.darkGrey,fontSize: FontSize.s16),
+          subtitle1: getMediumStyle(color: ColorManager.lightGrey,fontSize: FontSize.s14),
+          caption: getRegularStyle(color: ColorManager.grey1),
+          bodyText1: getRegularStyle(color: ColorManager.grey)),
 
     // input decoration theme (text form field)
   );
