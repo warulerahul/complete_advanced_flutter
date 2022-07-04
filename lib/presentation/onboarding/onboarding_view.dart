@@ -72,10 +72,64 @@ class _OnBoardingViewState extends State<OnBoardingView> {
             ),
 
             ///TODO add layout for indicator and arrows
+            _getBottomSheetWidget(),
           ],
         ),
       ),
     );
+  }
+
+  Widget _getBottomSheetWidget() {
+    return Row(
+      children: [
+
+        ///Left Arrow button
+        Padding(padding: const EdgeInsets.all(AppPadding.p14),
+        child: GestureDetector(
+          child: SizedBox(
+            height: AppSize.s20,
+            width: AppSize.s20,
+            child: SvgPicture.asset(ImageManager.leftArrowIc),
+          ),
+          onTap: (){
+            /// TODO go to next slid
+          },
+        ),),
+
+        ///Circle Indicator
+        Row(
+          children: [
+            for(int i = 0; i<_list.length; i++)
+              Padding(
+                padding: const EdgeInsets.all(AppPadding.p8),
+                child: _getProperCircle(i),
+              )
+          ],
+        ),
+
+        ///right Arrow button
+        Padding(padding: const EdgeInsets.all(AppPadding.p14),
+          child: GestureDetector(
+            child: SizedBox(
+              height: AppSize.s20,
+              width: AppSize.s20,
+              child: SvgPicture.asset(ImageManager.rightArrowIc),
+            ),
+            onTap: (){
+              /// TODO go to next slid
+            },
+          ),)
+      ],
+    );
+  }
+
+  Widget _getProperCircle(int index){
+    if(index == currentIndex){
+      return SvgPicture.asset(ImageManager.hollowCircleIc);
+    }
+    else{
+      return SvgPicture.asset(ImageManager.solidCircleIc);
+    }
   }
 }
 
