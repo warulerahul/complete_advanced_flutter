@@ -5,6 +5,7 @@ import 'package:complete_advanced_flutter/presentation/resources/strings_manager
 import 'package:complete_advanced_flutter/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../resources/assets_manager.dart';
 
@@ -38,6 +39,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
     return Scaffold(
       backgroundColor: ColorManager.white,
       appBar: AppBar(
+        backgroundColor: ColorManager.white,
         elevation: AppSize.s1_5,
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: ColorManager.white,
@@ -54,8 +56,25 @@ class _OnBoardingViewState extends State<OnBoardingView> {
             });
           },
           itemBuilder: (context, index){
-            //return OnboardingPage;
+            return OnBoardingPage(_list[index]);
           }),
+      bottomSheet: Container(
+        color: ColorManager.white,
+        height: AppSize.s100,
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: (){},
+                child: const Text(AppStrings.skip, textAlign: TextAlign.end,),
+              ),
+            ),
+
+            ///TODO add layout for indicator and arrows
+          ],
+        ),
+      ),
     );
   }
 }
@@ -70,7 +89,10 @@ class OnBoardingPage extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        ///Vertical Empty Space
         const SizedBox(height: AppSize.s40,),
+
+        /// Title Text
         Padding(
           padding: const EdgeInsets.all(AppPadding.p8),
           child: Text(_sliderObject.title,
@@ -78,13 +100,20 @@ class OnBoardingPage extends StatelessWidget {
           style: Theme.of(context).textTheme.headline1,),
         ),
 
+        /// SubTitle Text
         Padding(
           padding: const EdgeInsets.all(AppPadding.p8),
           child: Text(_sliderObject.subTitle,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.subtitle1,),
         ),
+
+        ///Vertical Empty Space
         const SizedBox(height: AppSize.s60,),
+
+        ///Image Widget
+        SvgPicture.asset(_sliderObject.image)
+
       ],
     );
   }
