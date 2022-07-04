@@ -1,13 +1,11 @@
-import 'dart:ui';
 
+import 'package:complete_advanced_flutter/presentation/resources/assets_manager.dart';
 import 'package:complete_advanced_flutter/presentation/resources/color_manager.dart';
 import 'package:complete_advanced_flutter/presentation/resources/strings_manager.dart';
 import 'package:complete_advanced_flutter/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../resources/assets_manager.dart';
 
 class OnBoardingView extends StatefulWidget {
   const OnBoardingView({Key? key}) : super(key: key);
@@ -32,7 +30,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
             AppStrings.onBoardingSubTitle4, ImageManager.onBoardingLogo4),
       ];
   
-  int currentIndex = 0;
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +50,14 @@ class _OnBoardingViewState extends State<OnBoardingView> {
           itemCount: _list.length,
           onPageChanged: (index){
             setState(() {
-              currentIndex = index;
+              _currentIndex = index;
             });
           },
           itemBuilder: (context, index){
             return OnBoardingPage(_list[index]);
           }),
       bottomSheet: Container(
-        color: ColorManager.white,
+        color: ColorManager.primary,
         height: AppSize.s100,
         child: Column(
           children: [
@@ -71,7 +69,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
               ),
             ),
 
-            ///TODO add layout for indicator and arrows
+            /// TODO add layout for indicator and arrows
             _getBottomSheetWidget(),
           ],
         ),
@@ -81,25 +79,30 @@ class _OnBoardingViewState extends State<OnBoardingView> {
 
   Widget _getBottomSheetWidget() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-
-        ///Left Arrow button
-        Padding(padding: const EdgeInsets.all(AppPadding.p14),
-        child: GestureDetector(
-          child: SizedBox(
-            height: AppSize.s20,
-            width: AppSize.s20,
-            child: SvgPicture.asset(ImageManager.leftArrowIc),
+        // left arrow
+        Padding(
+          padding: const EdgeInsets.all(AppPadding.p14),
+          child: GestureDetector(
+            child: SizedBox(
+              height: AppSize.s20,
+              width: AppSize.s20,
+              child: SvgPicture.asset(ImageManager.leftArrowIc),
+            ),
+            onTap: () {
+              // go to previous slide
+              _pageController.animateToPage(_getPreviousIndex(),
+                  duration: const Duration(milliseconds: DurationConstant.d300),
+                  curve: Curves.bounceInOut);
+            },
           ),
-          onTap: (){
-            /// TODO go to next slid
-          },
-        ),),
+        ),
 
-        ///Circle Indicator
+        // circles indicator
         Row(
           children: [
-            for(int i = 0; i<_list.length; i++)
+            for (int i = 0; i < _list.length; i++)
               Padding(
                 padding: const EdgeInsets.all(AppPadding.p8),
                 child: _getProperCircle(i),
@@ -107,36 +110,57 @@ class _OnBoardingViewState extends State<OnBoardingView> {
           ],
         ),
 
-        ///right Arrow button
-        Padding(padding: const EdgeInsets.all(AppPadding.p14),
+        // right arrow
+        Padding(
+          padding: const EdgeInsets.all(AppPadding.p14),
           child: GestureDetector(
             child: SizedBox(
               height: AppSize.s20,
               width: AppSize.s20,
               child: SvgPicture.asset(ImageManager.rightArrowIc),
             ),
-            onTap: (){
-              /// TODO go to next slid
+            onTap: () {
+              // go to next slide
+              _pageController.animateToPage(_getNextIndex(),
+                  duration: const Duration(milliseconds: DurationConstant.d300),
+                  curve: Curves.bounceInOut);
             },
-          ),)
+          ),
+        )
       ],
     );
   }
 
-  Widget _getProperCircle(int index){
-    if(index == currentIndex){
-      return SvgPicture.asset(ImageManager.hollowCircleIc);
+  int _getPreviousIndex() {
+    int previousIndex = _currentIndex--; // -1
+    if (previousIndex == -1) {
+      _currentIndex =
+          _list.length - 1; // infinite loop to go to the length of slider list
     }
-    else{
-      return SvgPicture.asset(ImageManager.solidCircleIc);
+    return _currentIndex;
+  }
+
+  int _getNextIndex() {
+    int nextIndex = _currentIndex++; // +1
+    if (nextIndex >= _list.length) {
+      _currentIndex = 0; // infinite loop to go to first item inside the slider
+    }
+    return _currentIndex;
+  }
+
+  Widget _getProperCircle(int index) {
+    if (index == _currentIndex) {
+      return SvgPicture.asset(ImageManager.hollowCircleIc); // selected slider
+    } else {
+      return SvgPicture.asset(ImageManager.solidCircleIc); // unselected slider
     }
   }
 }
 
 class OnBoardingPage extends StatelessWidget {
-   SliderObject _sliderObject;
+   final SliderObject _sliderObject;
 
-  OnBoardingPage(this._sliderObject, {Key? key}) : super(key: key);
+  const OnBoardingPage(this._sliderObject, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +196,6 @@ class OnBoardingPage extends StatelessWidget {
     );
   }
 }
-
 
 class SliderObject {
   String title;
